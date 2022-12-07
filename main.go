@@ -3,8 +3,21 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"sync"
+	"time"
 	"tutorial/common"
 )
+
+var wg = sync.WaitGroup{}
+
+func sendTicket(tickets int16, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var message = fmt.Sprintf("Sending %v ticket(s) for %v %v", tickets, firstName, lastName)
+	fmt.Println("_______________________________________________________")
+	fmt.Printf("\n%v to %v \n", message, email)
+	fmt.Println("_______________________________________________________")
+	wg.Done()
+}
 
 func main() {
 	const conferenceName string = "GopherCon"
@@ -56,22 +69,27 @@ func main() {
 
 		remainingTickets = remainingTickets - userTickets
 
-		if bookings[email].Email == "" {
-			bookings[email] = common.Booking{FirstName: firstName, LastName: lastName, Email: email, Tickets: userTickets}
+		if entry, ok := bookings[email]; ok {
+			entry.Tickets = entry.Tickets + userTickets
+			bookings[email] = entry
 		} else {
-			if entry, ok := bookings[email]; ok {
-				entry.Tickets = entry.Tickets + userTickets
-				bookings[email] = entry
+			bookings[email] = common.Booking{
+				FirstName: firstName,
+				LastName:  lastName,
+				Email:     email,
+				Tickets:   userTickets,
 			}
 		}
 
 		fmt.Printf("Thank you %v %v for your purchase. You have bought %v tickets. \n", firstName, lastName, userTickets)
+
+		wg.Add(1)
+		go sendTicket(userTickets, firstName, lastName, email)
 
 		if remainingTickets == 0 {
 			fmt.Println("We are now sold out !")
 			break
 		}
 	}
-
-	common.PrintBookingsMap(bookings)
+	wg.Wait()
 }

@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 	"tutorial/common"
+	"tutorial/files"
 )
 
 var wg = sync.WaitGroup{}
@@ -19,7 +20,7 @@ func sendTicket(tickets int16, firstName string, lastName string, email string) 
 	wg.Done()
 }
 
-func main() {
+func bookTickets() {
 	const conferenceName string = "GopherCon"
 	const conferenceTickets int16 = 100
 
@@ -92,4 +93,35 @@ func main() {
 		}
 	}
 	wg.Wait()
+}
+
+func menu() {
+	var choice int
+	fmt.Println("Welcome please choose an action")
+	fmt.Println("1. Book a ticket")
+	fmt.Println("2. Look for go occurence in text file")
+	fmt.Println("3. Exit")
+	fmt.Printf("Your choice: ")
+	fmt.Scan(&choice)
+
+	for reflect.TypeOf(choice).Kind() != reflect.Int || choice < 1 || choice > 3 {
+		fmt.Println("Invalid choice, please choose a number between 1 and 3")
+		fmt.Printf("Your choice: ")
+		fmt.Scan(&choice)
+	}
+
+	switch choice {
+	case 1:
+		fmt.Println("You chose to book a ticket")
+		bookTickets()
+	case 2:
+		files.Main()
+	case 3:
+		fmt.Println("You chose to exit")
+		return
+	}
+}
+
+func main() {
+	menu()
 }

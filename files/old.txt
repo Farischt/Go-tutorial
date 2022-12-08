@@ -1,0 +1,3 @@
+Welcome to the go conference ! Let's go !
+Go est un langage de programmation compilé et concurrent inspiré de C et Pascal.
+Ce langage a été développé par Google à partir d’un concept initial de Robert Griesemer, Rob Pike et Ken Thompson.

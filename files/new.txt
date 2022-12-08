@@ -1,0 +1,3 @@
+Welcome to the Python conference ! Let's Python !
+Python est un langage de programmation compilé et concurrent inspiré de C et Pascal.
+Ce langage a été développé par Google à partir d’un concept initial de Robert Griesemer, Rob Pike et Ken Thompson.
